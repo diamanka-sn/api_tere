@@ -14,33 +14,31 @@ export class BookController {
             })
             .catch((error) => console.log(error));
     }
+
     async getAll(req: Request, res: Response) {
         try {
-            const list_books = await this.bookService.getAllBooks({})
-            res.json(list_books)
-        } catch (error:any) {
+            const list_books = await this.bookService.getAll({});
+            res.json(list_books);
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
 
     async getById(req: Request, res: Response) {
         try {
-            const book = await this.bookService.getBookById({ id: parseInt(req.params.id) });
-            if (book) {
-                res.json(book);
-            } else {
-                res.sendStatus(404);
-            }
-        } catch (error:any) {
+            const book = await this.bookService.getById({ id: parseInt(req.params.id) });
+            book ? res.json(book) : res.sendStatus(404);
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
 
     async create(req: Request, res: Response) {
         try {
-            const { title, author, description, condition } = req.body;
+            const { title, author, description, status } = req.body;
             const ownerId = parseInt(req.params.ownerId);
-            if (!title || !author || !description || !condition) {
+
+            if (!title || !author || !description || !status) {
                 return res.status(400).json({ message: 'Données manquantes' });
             }
 
@@ -48,56 +46,49 @@ export class BookController {
             book.title = title;
             book.author = author;
             book.description = description;
-            book.condition = condition;
-            book.points = 100;
+            book.status = status;
 
-            const userRepository = AppDataSource.getRepository(User);
-            const owner = await userRepository.findOne({ where: { id: ownerId } });
+            const owner = await this.getUserById(ownerId);
             if (!owner) {
                 return res.status(404).json({ message: 'Utilisateur non trouvé' });
             }
-            book.owner = owner;
 
-            const createdBook = await this.bookService.createBook(book);
+            book.user = owner;
+
+            const createdBook = await this.bookService.create(book);
             res.status(201).json(createdBook);
-        } catch (error:any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
 
     async update(req: Request, res: Response) {
         try {
-            const { title, author, description, condition, points } = req.body;
+            const { title, author, description, status } = req.body;
             const bookId = parseInt(req.params.id);
-            const userId = req.params?.userId; 
+            const userId = req.params?.userId;
 
             if (!userId) {
                 return res.status(401).json({ message: 'Non autorisé' });
             }
 
-            const bookRepository = AppDataSource.getRepository(Book);
-            const book = await bookRepository.findOne({
-                where: { id: bookId },
-                relations: ['owner'],
-            });
-
+            const book = await this.getBookById(bookId);
             if (!book) {
                 return res.status(404).json({ message: 'Livre non trouvé' });
             }
 
-            if (book.owner.id !== userId) {
+            if (book.user?.id !== userId) {
                 return res.status(403).json({ message: 'Accès non autorisé' });
             }
 
             book.title = title;
             book.author = author;
             book.description = description;
-            book.condition = condition;
-            book.points = points;
+            book.status = status;
 
-            const updatedBook = await this.bookService.updateBook({ id: bookId }, book);
+            const updatedBook = await this.bookService.update({ id: bookId }, book);
             res.json(updatedBook);
-        } catch (error:any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -105,29 +96,24 @@ export class BookController {
     async delete(req: Request, res: Response) {
         try {
             const bookId = parseInt(req.params.id);
-            const userId = req.params?.userId; 
+            const userId = req.params?.userId;
 
             if (!userId) {
                 return res.status(401).json({ message: 'Non autorisé' });
             }
 
-            const bookRepository = AppDataSource.getRepository(Book);
-            const book = await bookRepository.findOne({
-                where: { id: bookId },
-                relations: ['owner'],
-            });
-
+            const book = await this.getBookById(bookId);
             if (!book) {
                 return res.status(404).json({ message: 'Livre non trouvé' });
             }
 
-            if (book.owner.id !== userId) {
+            if (book.user?.id !== userId) {
                 return res.status(403).json({ message: 'Accès non autorisé' });
             }
 
-            const result = await this.bookService.deleteBook(bookId);
+            await this.bookService.delete(bookId);
             res.sendStatus(204);
-        } catch (error:any) {
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
@@ -137,15 +123,28 @@ export class BookController {
             const userId = parseInt(req.params.userId);
 
             const userRepository = AppDataSource.getRepository(User);
-            const user = await userRepository.findOne({ where: { id: userId }, relations: ['ownedBooks'] });
+            const user = await userRepository.findOne({ where: { id: userId }, relations: ['books'] });
 
             if (!user) {
                 return res.status(404).json({ message: 'Utilisateur non trouvé' });
             }
 
-            res.json(user.ownedBooks);
-        } catch (error:any) {
+            res.json(user.books);
+        } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
+    }
+
+    async getUserById(userId: number) {
+        const userRepository = AppDataSource.getRepository(User);
+        return userRepository.findOne({ where: { id: userId } });
+    }
+
+    async getBookById(bookId: number) {
+        const bookRepository = AppDataSource.getRepository(Book);
+        return bookRepository.findOne({
+            where: { id: bookId },
+            relations: ['user'],
+        });
     }
 }

@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, BaseEntity } from "typeorm";
 import { Book } from "./book";
-import { Exchange } from "./exchange";
 
 @Entity()
 export class User extends BaseEntity {
@@ -19,15 +18,6 @@ export class User extends BaseEntity {
     @Column()
     password!: string;
 
-    @Column()
-    point!: number;
-
-    @OneToMany(() => Book, book => book.owner)
-    ownedBooks!: Book[];
-
-    @OneToMany(() => Exchange, exchange => exchange.sender)
-    sentExchanges!: Exchange[];
-
-    @OneToMany(() => Exchange, exchange => exchange.receiver)
-    receivedExchanges!: Exchange[];
+    @OneToMany(() => Book, book => book.user)
+    books!: Book[];
 }

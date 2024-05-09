@@ -15,12 +15,9 @@ export class Book {
     @Column()
     description!: string;
 
-    @Column({ default: 'new' })
-    condition!: string;
+    @Column()
+    status?: string;
 
-    @Column({ default: 100 })
-    points!: number;
-
-    @ManyToOne(() => User, user => user.ownedBooks)
-    owner!: User;
+    @ManyToOne(() => User, user => user.books)
+    user?: User;
 }

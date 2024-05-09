@@ -16,7 +16,7 @@ export class UserController {
 
     async getAll(req: Request, res: Response) {
         try {
-            const list_users = await this.userService.getAllUsers({});
+            const list_users = await this.userService.getAll({});
             res.json(list_users);
         } catch (error: any) {
             res.status(500).json({ message: error.message });
@@ -25,7 +25,7 @@ export class UserController {
 
     async getById(req: Request, res: Response) {
         try {
-            const user = await this.userService.getUserById({ id: Number(req.params.id) });
+            const user = await this.userService.getById({ id: Number(req.params.id) });
             if (user) {
                 res.json(user);
             } else {
@@ -42,19 +42,15 @@ export class UserController {
             res.status(400).json({ message: "body not match contract " });
         } else {
             try {
-                const UserNotExist = await this.userService.notExist({phone:phone});
-                if (UserNotExist) {
+              
                     const user: User = new User();
                     user.firstname = firstname;
                     user.lastname = lastname;
                     user.phone = phone;
                     user.password = password;
-                    user.point = 100;
-                    const data = await this.userService.createUser(user);
+                    const data = await this.userService.create(user);
                     res.status(201).json(data);
-                  } else {
-                    res.status(400).json({ message: "user already exist " });
-                  }
+                 
             } catch (error: any) {
                 res.status(400).json({ message: error.message });
             }
@@ -65,7 +61,7 @@ export class UserController {
         try {
             const user: User = req.body;
             user.id = Number(req.params.id);
-            const data = await this.userService.updateUser({ id: user.id }, user);
+            const data = await this.userService.update({ id: user.id }, user);
             res.status(200).json(data);
         } catch (error: any) {
             console.log(error)
@@ -76,7 +72,7 @@ export class UserController {
     async delete(req: Request, res: Response) {
         try {
             const id = Number(req.params.id);
-            await this.userService.deleteUser(id);
+            await this.userService.delete(id);
             res.sendStatus(204);
         } catch (error: any) {
             res.status(500).json({ message: error.message });
