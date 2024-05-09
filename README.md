@@ -34,4 +34,4 @@ Elle permet aux utilisateurs d'enregistrer leurs livres, de suivre leur statut d
 
 ## Documentation technique
 
-
+[Lien vers la documentation technique](https://www.postman.com/spaceflight-geoscientist-41806460/workspace/tere-api/collection/34504049-6494ae56-b6ae-4f37-badb-6e0b83d8831d?action=share&creator=34504049)
