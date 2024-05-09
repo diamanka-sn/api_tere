@@ -1,16 +1,21 @@
 # TERE APP
 
-TERE App est une application qui permet aux utilisateurs d'échanger des livres. Les utilisateurs peuvent acquérir des points en échangeant leurs livres, acheter des points supplémentaires ou utiliser ces points pour obtenir de nouveaux livres d'autres utilisateurs.
+Elle permet aux utilisateurs d'enregistrer leurs livres, de suivre leur statut de lecture (en attente, en cours, terminé) et d'échanger ou de vendre leurs livres terminés avec d'autres utilisateurs en utilisant un système de points.
 
 ## Fonctionnalités
 
-- **Système de points**
-- **Catalogue de livres**
-- **Profils utilisateurs**
-- **Échange de livres**
-- **Achat de points**
-- **Notation et commentaires**
-- **Notifications**
+- Ajout, suppression et mise à jour des livres d'un utilisateur
+- Suivi du statut de lecture des livres (en attente, en cours, terminé)
+- Proposition de vendre ou d'échanger un livre terminé
+
+## Fonctionnalités en cours de développement
+
+- Authentification
+- Système de points pour les transactions d'échange ou de vente de livres
+- Gestion des transactions d'échange ou de vente de livres entre utilisateurs
+- Notifications
+- Gestion des utilisateurs
+- Chat entre users
 
 ## Technologies utilisées
 

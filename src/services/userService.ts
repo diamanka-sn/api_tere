@@ -1,8 +1,6 @@
-import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
-import { AppDataSource } from "../data-source";
+import {  Repository } from "typeorm";
 import { User } from "../models/user";
 import { AbstractService } from "./AbstractService";
-import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 
 export class UserService extends AbstractService<User> {
   

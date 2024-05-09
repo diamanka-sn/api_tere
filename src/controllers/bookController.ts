@@ -6,7 +6,6 @@ import { Book } from "../models/book";
 
 export class BookController {
     private bookService!: BookService;
-
     constructor() {
         AppDataSource.initialize()
             .then(async () => {
@@ -36,7 +35,7 @@ export class BookController {
     async create(req: Request, res: Response) {
         try {
             const { title, author, description, status } = req.body;
-            const ownerId = parseInt(req.params.ownerId);
+            const ownerId = parseInt(req.params.userId);
 
             if (!title || !author || !description || !status) {
                 return res.status(400).json({ message: 'Données manquantes' });
@@ -64,28 +63,19 @@ export class BookController {
 
     async update(req: Request, res: Response) {
         try {
-            const { title, author, description, status } = req.body;
+            const book: Book = req.body;
             const bookId = parseInt(req.params.id);
             const userId = req.params?.userId;
 
-            if (!userId) {
-                return res.status(401).json({ message: 'Non autorisé' });
-            }
-
-            const book = await this.getBookById(bookId);
-            if (!book) {
+            const b = await this.getBookById(bookId);
+            if (!b) {
                 return res.status(404).json({ message: 'Livre non trouvé' });
             }
 
-            if (book.user?.id !== userId) {
+            if (b.user?.id !== userId) {
                 return res.status(403).json({ message: 'Accès non autorisé' });
             }
-
-            book.title = title;
-            book.author = author;
-            book.description = description;
-            book.status = status;
-
+            
             const updatedBook = await this.bookService.update({ id: bookId }, book);
             res.json(updatedBook);
         } catch (error: any) {

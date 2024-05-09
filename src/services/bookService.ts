@@ -1,8 +1,6 @@
 import { Book } from '../models/book';
 import { Repository } from 'typeorm';
-import { DeepPartial, FindOptionsWhere } from 'typeorm';
 import { AbstractService } from './AbstractService';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export class BookService extends AbstractService<Book> {
     constructor(repository: Repository<Book>) {

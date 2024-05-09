@@ -12,7 +12,7 @@ export class Book {
     @Column()
     author!: string;
 
-    @Column()
+    @Column("text")
     description!: string;
 
     @Column()

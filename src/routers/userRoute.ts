@@ -20,7 +20,9 @@ export class UserRoutes{
         this.router.put('/:id',  this.userController.update.bind(this.userController));
         this.router.delete('/:id',  this.userController.delete.bind(this.userController));
 
-        this.router.post('/:ownerId/books',  this.bookController.create.bind(this.bookController));
         this.router.get('/:userId/books',  this.bookController.getUserBooks.bind(this.bookController));
+        this.router.post('/:userId/books',  this.bookController.create.bind(this.bookController));
+        this.router.put('/:userId/books/:id',  this.bookController.update.bind(this.bookController));
+        this.router.delete('/:userId/books/:id',  this.bookController.delete.bind(this.bookController));
     }
 }

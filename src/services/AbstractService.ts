@@ -1,4 +1,4 @@
-import { DeepPartial, FindOptions, FindOptionsWhere, ObjectLiteral, Repository } from "typeorm";
+import { DeepPartial, FindOptionsWhere, ObjectLiteral, Repository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 export abstract class AbstractService<T extends ObjectLiteral> {
     protected repository: Repository<T>;
@@ -21,7 +21,7 @@ export abstract class AbstractService<T extends ObjectLiteral> {
         const data = await this.repository.find(
             { where: filter }
         )
-        return data.length <= 0 ? true : false
+        return data.length <= 0
     }
 
     async create(data: DeepPartial<T>): Promise<T> {
@@ -30,7 +30,7 @@ export abstract class AbstractService<T extends ObjectLiteral> {
         return result;
     }
 
-    async delete(id: number): Promise<any> {
+    async delete(id: number): Promise<T> {
         const result: any = await this.repository.delete(id)
         return result;
     }
@@ -39,6 +39,6 @@ export abstract class AbstractService<T extends ObjectLiteral> {
         await this.repository.update(filter, data)
         const result = await this.repository.findOneBy(filter);
 
-        return result || null;
+        return result;
     }
 }
