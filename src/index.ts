@@ -3,7 +3,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import { UserRoutes } from "./routers/userRoute";
 import { BookRoutes } from './routers/bookRoute';
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
 
 
 const app = express();
