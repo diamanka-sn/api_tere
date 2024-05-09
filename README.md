@@ -23,7 +23,7 @@ TERE App est une application qui permet aux utilisateurs d'échanger des livres.
 ## Run le projet
 
 1. git clone https://github.com/diamanka-sn/api_tere.git
-2. cp api_tere
+2. cd api_tere
 3. npm i
 4. npm run dev
 
