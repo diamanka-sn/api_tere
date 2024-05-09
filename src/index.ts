@@ -2,6 +2,7 @@ import "reflect-metadata"
 import express from "express";
 import bodyParser from "body-parser";
 import { UserRoutes } from "./routers/userRoute";
+import { BookRoutes } from './routers/bookRoute';
 require("dotenv").config();
 
 
@@ -12,8 +13,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const userRoutes = new UserRoutes();
-//brancher mes routes
+const bookRoutes = new BookRoutes();
+
 app.use("/utilisateurs", userRoutes.router);
+app.use("/books", bookRoutes.router);
 
 
 app.listen(process.env.PORT || 3000);

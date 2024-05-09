@@ -33,4 +33,6 @@ export class UserService extends AbstractService<User> {
   async userNotExist(filter: FindOptionsWhere<User>): Promise<boolean> {
     return this.notExist(filter);
   }
+
+
 }
