@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
     username: process.env.USER_DB || "root",
     password: process.env.PASSWORD_DB || "",
     database: process.env.DB_NAME || "tere_db",
-    synchronize: true,
+    synchronize: false,
     logging: false,
     entities: [User, Book],
     migrations: [],
