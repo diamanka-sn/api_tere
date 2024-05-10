@@ -35,14 +35,28 @@ export class UserController {
             res.status(500).json({ message: error.message });
         }
     }
+    async login(req: Request, res: Response) {
+        const { phone, password } = req.body
+        if (phone === undefined || password === undefined) {
+            res.status(400).json({ message: "Données manquantes. " });
+        } else {
+            const user = await this.userService.getByFilter({phone:phone, password:password})
+            if(user){
+                res.status(200).json(user);
+            } else {
+                res.status(400).json({ message: "Numéro de téléphone et/ou mot de passe incorrect. " });
+            }
+        }
+    }
 
     async create(req: Request, res: Response) {
         const { firstname, lastname, phone, password } = req.body;
         if (firstname === undefined || lastname === undefined || phone === undefined || password === undefined) {
-            res.status(400).json({ message: "body not match contract " });
+            res.status(400).json({ message: "Données manquantes. " });
         } else {
             try {
-              
+                const userNoExist = await this.userService.notExist({ phone: phone });
+                if (userNoExist) {
                     const user: User = new User();
                     user.firstname = firstname;
                     user.lastname = lastname;
@@ -50,7 +64,11 @@ export class UserController {
                     user.password = password;
                     const data = await this.userService.create(user);
                     res.status(201).json(data);
-                 
+                } else {
+                    res.status(400).json({ message: "Cet utilisateur existe déjà. " });
+                }
+
+
             } catch (error: any) {
                 res.status(400).json({ message: error.message });
             }
