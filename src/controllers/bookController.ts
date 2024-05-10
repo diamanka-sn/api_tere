@@ -36,7 +36,6 @@ export class BookController {
         try {
             const { title, author, description, status } = req.body;
             const ownerId = parseInt(req.params.userId);
-
             if (!title || !author || !description || !status) {
                 return res.status(400).json({ message: 'Données manquantes' });
             }
@@ -57,6 +56,7 @@ export class BookController {
             const createdBook = await this.bookService.create(book);
             res.status(201).json(createdBook);
         } catch (error: any) {
+            console.log(error)
             res.status(500).json({ message: error.message });
         }
     }
@@ -86,8 +86,7 @@ export class BookController {
     async delete(req: Request, res: Response) {
         try {
             const bookId = parseInt(req.params.id);
-            const userId = req.params?.userId;
-
+            const userId = req.params.userId;
             if (!userId) {
                 return res.status(401).json({ message: 'Non autorisé' });
             }
@@ -96,8 +95,9 @@ export class BookController {
             if (!book) {
                 return res.status(404).json({ message: 'Livre non trouvé' });
             }
-
-            if (book.user?.id !== userId) {
+            
+            if (book.user?.id !== Number(userId)) {
+                console.log(typeof userId)
                 return res.status(403).json({ message: 'Accès non autorisé' });
             }
 

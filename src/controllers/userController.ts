@@ -44,7 +44,7 @@ export class UserController {
             if(user){
                 res.status(200).json(user);
             } else {
-                res.status(400).json({ message: "Numéro de téléphone et/ou mot de passe incorrect. " });
+                res.sendStatus(404)
             }
         }
     }
