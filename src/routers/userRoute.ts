@@ -16,6 +16,7 @@ export class UserRoutes{
     private configRoutes(){
         this.router.get('/',  this.userController.getAll.bind(this.userController));
         this.router.post('/',  this.userController.create.bind(this.userController));
+        this.router.post('/login',  this.userController.login.bind(this.userController));
         this.router.get('/:id',  this.userController.getById.bind(this.userController));
         this.router.put('/:id',  this.userController.update.bind(this.userController));
         this.router.delete('/:id',  this.userController.delete.bind(this.userController));
